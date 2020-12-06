@@ -7,14 +7,19 @@ import {Provider} from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 import CssBaseline from "@material-ui/core/CssBaseline";
 import axios from 'axios';
+import {BAD_REQUEST, UNAUTHORIZED, FORBIDDEN} from 'http-status-codes';
 
 axios.interceptors.response.use(
   response => {
     return response;
   },
   function(error) {
-    if (error.response.status === 400) {
+    const responseStatus = error.response.status;
+    if (responseStatus === BAD_REQUEST) {
       alert(error.response.data?.data);
+    }
+    if (responseStatus === UNAUTHORIZED || responseStatus === FORBIDDEN) {
+      alert(error.response.data.message);
     }
     return Promise.reject(error.response);
   }
